@@ -52,6 +52,15 @@ const getGoods = () => {
         })
     })
 
+    const viewAllBtn = document.querySelector(`.more`)
+
+    if (viewAllBtn) {
+        viewAllBtn.addEventListener('click', (event) => {
+            event.preventDefault()
+            getData()
+        })
+    }
+
     if (localStorage.getItem('goods') && window.location.pathname.includes("goods.html")) {
         renderGoods(JSON.parse(localStorage.getItem('goods')));
     }
