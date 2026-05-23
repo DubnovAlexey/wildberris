@@ -5,6 +5,17 @@ const cart = function () {
     const goodsContainer = document.querySelector('.long-goods-list')
     const cartTable = document.querySelector('.cart-table__goods')
     const modalForm = document.querySelector('.modal-form')
+    const cartCount = document.querySelector('.cart-count')
+    const cartTotal = document.querySelector('.card-table__total')
+
+    const updateCartCount = () => {
+        const cartArray = localStorage.getItem('cart') ?
+            JSON.parse(localStorage.getItem('cart')) : []
+        const totalCount = cartArray.reduce((sum, item) => sum + item.count, 0)
+        if (cartCount) {
+            cartCount.textContent = totalCount > 0 ? totalCount : ''
+        }
+    }
 
     const deleteCartItem = (id) => {
         const cart = JSON.parse(localStorage.getItem('cart'))
@@ -41,7 +52,7 @@ const cart = function () {
                 }
             }
             return good
-        })
+        }).filter(good => good.count > 0)
 
         localStorage.setItem('cart', JSON.stringify(newCart))
         renderCartGoods(JSON.parse(localStorage.getItem('cart')))
@@ -75,6 +86,14 @@ const cart = function () {
     const renderCartGoods = (goods) => {
         cartTable.innerHTML = ''
 
+        const totalPrice = goods.reduce((sum, good) => {
+            return sum + (+good.price * +good.count)
+        }, 0)
+
+        if (cartTotal) {
+            cartTotal.textContent = totalPrice + '$'
+        }
+
         goods.forEach(good => {
             const tr = document.createElement('tr')
             tr.innerHTML = `
@@ -107,21 +126,31 @@ const cart = function () {
                 }
             })
         })
-
+        if (cartTotal) {
+            cartTotal.textContent = totalPrice + '$'
+        }
     }
+
     const sendForm = () => {
         const cartArray = localStorage.getItem('cart') ?
             JSON.parse(localStorage.getItem('cart')) : []
+
+        const nameInput = modalForm.querySelector('[name="nameCustomer"]')
+        const phoneInput = modalForm.querySelector('[name="phoneCustomer"]')
 
         fetch('https://jsonplaceholder.typicode.com/posts', {
             method: 'POST',
             body: JSON.stringify({
                 cart: cartArray,
-                name: '',
-                phone: ''
+                name: nameInput ? nameInput.value.trim() : '',
+                phone: phoneInput ? phoneInput.value.trim() : ''
             })
         }).then(() => {
+            modalForm.reset()
+            localStorage.removeItem('cart')
+            updateCartCount()
             cart.style.display = ``
+            alert('Спасибо за заказ!')
         })
     }
 
@@ -136,7 +165,6 @@ const cart = function () {
         const cartArray = localStorage.getItem('cart') ?
             JSON.parse(localStorage.getItem('cart')) : []
         renderCartGoods(cartArray)
-
         cart.style.display = `flex`
     })
 
@@ -166,6 +194,7 @@ const cart = function () {
             }
         })
     }
+    updateCartCount()
 
 }
 
