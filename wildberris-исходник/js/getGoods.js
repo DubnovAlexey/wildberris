@@ -1,5 +1,6 @@
 const getGoods = () => {
     const links = document.querySelectorAll(`.navigation-link`)
+    const more = document.querySelector(`.more`)
 
     const renderGoods = (goods) => {
         const goodsContainer = document.querySelector('.long-goods-list')
@@ -52,18 +53,19 @@ const getGoods = () => {
         })
     })
 
-    const viewAllBtn = document.querySelector(`.more`)
-
-    if (viewAllBtn) {
-        viewAllBtn.addEventListener('click', (event) => {
-            event.preventDefault()
-            getData()
-        })
-    }
 
     if (localStorage.getItem('goods') && window.location.pathname.includes("goods.html")) {
         renderGoods(JSON.parse(localStorage.getItem('goods')));
     }
+
+    if (more) {
+        more.addEventListener('click', (event) => {
+            event.preventDefault()
+
+            getData()
+        })
+    }
+
 }
 
 getGoods()
