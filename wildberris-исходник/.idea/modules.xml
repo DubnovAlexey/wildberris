@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/wildberris-исходник.iml" filepath="$PROJECT_DIR$/.idea/wildberris-исходник.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../wildberris/.idea/wildberris.iml" filepath="$PROJECT_DIR$/../wildberris/.idea/wildberris.iml" />
     </modules>
   </component>
 </project>
